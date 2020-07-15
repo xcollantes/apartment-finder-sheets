@@ -5,8 +5,8 @@
 */
 
 walkResponse = "";
-WALK_API_KEY = "";
-GOOGLE_MAPS_KEY = "";
+WALK_API_KEY = _getWalkscoreApiKey();
+GOOGLE_MAPS_KEY = _getGoogleMapsApiKey();
 
 function _getWalkscoreResponseHandler(address){
   var latLongArr = _geoencode(address);
@@ -54,9 +54,26 @@ function getBikescore(address){
   return jsonResponse["bike"].score;
 }
 
+
+function _getWalkscoreApiKey(){
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var walkscoreCell = ss.getRange("api_keys!B1");
+  
+  return walkscoreCell.getValue();
+}
+
+function _getGoogleMapsApiKey(){
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var googleMapsCell = ss.getRange("api_keys!B2");
+  
+  return googleMapsCell.getValue();
+}
+
 function test(){
   //Logger.log(_geoencode("***REDACTED***"));
-  Logger.log("WALK: " + getWalkscore("***REDACTED***"));
-  Logger.log("BIKE: " + getBikescore("***REDACTED***"));
+  //Logger.log("WALK: " + getWalkscore("***REDACTED***"));
+  //Logger.log("BIKE: " + getBikescore("***REDACTED***"));
+  
+  //Logger.log(_getWalkscoreApiKey());
 
 }
