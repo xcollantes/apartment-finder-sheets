@@ -5,8 +5,8 @@
 */
 
 walkResponse = "";
-WALK_API_KEY = "***REDACTED***";
-GOOGLE_MAPS_KEY = "***REDACTED***";
+WALK_API_KEY = "";
+GOOGLE_MAPS_KEY = "";
 
 function _getWalkscoreResponseHandler(address){
   var latLongArr = _geoencode(address);
