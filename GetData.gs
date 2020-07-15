@@ -5,7 +5,7 @@
 */
 
 walkResponse = "";
-WALK_API_KEY = " ";
+WALK_API_KEY = "";
 GOOGLE_MAPS_KEY = "";
 
 function _getWalkscoreResponseHandler(address){
