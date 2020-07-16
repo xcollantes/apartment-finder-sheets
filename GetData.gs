@@ -101,28 +101,33 @@ function _getGoogleMapsApiKey(){
 * @param {text} departure_time OPTIONAL. The desired time of departure. You can specify the time as an integer in seconds since midnight, January 1, 1970 UTC. Alternatively, you can specify a value of now, which sets the departure time to the current time (correct to the nearest second).  
 * @param {text} avoid OPTIONAL. Route restrictions: Avoid the following "tolls", "highways", "ferries", or "indoors". 
 * @param {text} units OPTIONAL. Choose between "imperial" (default) or "metric". 
-* @return Duration as a text in imperial units. 
+* @return Distance as a text in chosen units. 
 * @customfunction
 */
 function GOOGLE_MAPS_DISTANCE(origin, destination, api_key, mode, arrival_time, departure_time, avoid, units){
-  if (units == null){
-    units = "imperial";
+  if (origin == null || destination == null){ return; };
+  
+  var url = ("https://maps.googleapis.com/maps/api/distancematrix/json" +
+             "?origins=" + `${origin}` + 
+             "&destinations=" + `${destination}`);
+  
+  if (api_key !== undefined){ url = url + "&key=" + `${api_key}`; };
+  if (mode !== undefined){ url = url + "&mode=" + `${mode}`; };
+  if (arrival_time !== undefined){ url = url + "&arrival_time=" + `${arrival_time}`; };
+  if (departure_time !== undefined){ url = url + "&departure_time=" + `${departure_time}`; };
+  if (avoid !== undefined){ url = url + "&avoid=" + `${avoid}`; };
+  
+  if (units == undefined || units == "imperial"){ 
+    url = url + "&units=imperial"; 
+  } else {
+    url = url + "&units=metric";
   };
   
-  var url = encodeURI("https://maps.googleapis.com/maps/api/distancematrix/json" + 
-                      "?units=" + `${units}` + 
-                      "&origins=" + `${origin}` + 
-                      "&destinations=" + `${destination}` +
-                      "&arrival_time=" + `${arrival_time}` + 
-                      "&departure_time=" + `${departure_time}` + 
-                      "&avoid=" + `${avoid}` +
-                      "&mode=" + `${mode}` +
-                      "&key=" + `${api_key}`);
-  
-  var response = UrlFetchApp.fetch(url);
+  var response = UrlFetchApp.fetch(encodeURI(url));
 
   textResponse = response.getContentText();
   jsonResponse = JSON.parse(textResponse);
+  Logger.log(jsonResponse);
 
   return jsonResponse.rows[0].elements[0].distance.text;
 }
@@ -143,36 +148,30 @@ function GOOGLE_MAPS_DISTANCE(origin, destination, api_key, mode, arrival_time, 
 * @customfunction
 */
 function GOOGLE_MAPS_DURATION(origin, destination, api_key, mode, arrival_time, departure_time, avoid, units){
-  if (units == null){
-    units = "imperial";
+  
+  if (origin == null || destination == null){ return; };
+  
+  var url = ("https://maps.googleapis.com/maps/api/distancematrix/json" +
+             "?origins=" + `${origin}` + 
+             "&destinations=" + `${destination}`);
+  
+  if (api_key !== undefined){ url = url + "&key=" + `${api_key}`; };
+  if (mode !== undefined){ url = url + "&mode=" + `${mode}`; };
+  if (arrival_time !== undefined){ url = url + "&arrival_time=" + `${arrival_time}`; };
+  if (departure_time !== undefined){ url = url + "&departure_time=" + `${departure_time}`; };
+  if (avoid !== undefined){ url = url + "&avoid=" + `${avoid}`; };
+  
+  if (units == undefined || units == "imperial"){ 
+    url = url + "&units=imperial"; 
+  } else {
+    url = url + "&units=metric";
   };
   
-  var url = encodeURI("https://maps.googleapis.com/maps/api/distancematrix/json" + 
-                      "?units=" + `${units}` + 
-                      "&origins=" + `${origin}` + 
-                      "&destinations=" + `${destination}` +
-                      "&arrival_time=" + `${arrival_time}` + 
-                      "&departure_time=" + `${departure_time}` + 
-                      "&avoid=" + `${avoid}` +
-                      "&mode=" + `${mode}` +
-                      "&key=" + `${api_key}`);
-  
-  var response = UrlFetchApp.fetch(url);
+  var response = UrlFetchApp.fetch(encodeURI(url));
 
   textResponse = response.getContentText();
   jsonResponse = JSON.parse(textResponse);
+  Logger.log(jsonResponse);
 
   return jsonResponse.rows[0].elements[0].duration.text;
-}
-
-
-
-
-function test(){
-  //Logger.log(_geoencode("1021 Mercer St, Seattle, WA 98109"));
-  //Logger.log("WALK: " + getWalkscore("1021 Mercer St, Seattle, WA 98109"));
-  //Logger.log("BIKE: " + getBikescore("1021 Mercer St, Seattle, WA 98109"));
-  
-  //Logger.log(_getWalkscoreApiKey());
-
 }
