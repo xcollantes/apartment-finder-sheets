@@ -134,15 +134,28 @@ function GOOGLE_MAPS_DISTANCE(origin, destination, api_key, mode, arrival_time, 
 * @param {text} origin Origin address.
 * @param {text} destination Destination address.
 * @param {text} api_key Google Maps API key. developers.google.com/maps/documentation/distance-matrix/get-api-key
+* @param {text} mode OPTIONAL. Type of transportation: "driving" (default), "walking", "bicycling", or "transit". 
+* @param {text} arrival_time OPTIONAL. Specifies the desired time of arrival for transit requests, in seconds since midnight, January 1, 1970 UTC. You can specify either departure_time or arrival_time, but not both. 
+* @param {text} departure_time OPTIONAL. The desired time of departure. You can specify the time as an integer in seconds since midnight, January 1, 1970 UTC. Alternatively, you can specify a value of now, which sets the departure time to the current time (correct to the nearest second).  
+* @param {text} avoid OPTIONAL. Route restrictions: Avoid the following "tolls", "highways", "ferries", or "indoors". 
+* @param {text} units OPTIONAL. Choose between "imperial" (default) or "metric". 
 * @return Duration as a text in imperial units. 
 * @customfunction
 */
-function GOOGLE_MAPS_DURATION(origin, destination, mode, api_key){
+function GOOGLE_MAPS_DURATION(origin, destination, api_key, mode, arrival_time, departure_time, avoid, units){
+  if (units == null){
+    units = "imperial";
+  };
+  
   var url = encodeURI("https://maps.googleapis.com/maps/api/distancematrix/json" + 
-                      "?units=imperial" + 
+                      "?units=" + `${units}` + 
                       "&origins=" + `${origin}` + 
-                      "&destinations=" + `${destination}` + 
-                      "&key=" + `${api_key}`)
+                      "&destinations=" + `${destination}` +
+                      "&arrival_time=" + `${arrival_time}` + 
+                      "&departure_time=" + `${departure_time}` + 
+                      "&avoid=" + `${avoid}` +
+                      "&mode=" + `${mode}` +
+                      "&key=" + `${api_key}`);
   
   var response = UrlFetchApp.fetch(url);
 
